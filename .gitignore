@@ -1,0 +1,19 @@
+# Unreal Engine generated files
+**/Binaries/
+**/DerivedDataCache/
+**/Intermediate/
+**/Saved/
+**/.vs/
+
+# IDE and build artifacts
+**/*.sln
+**/*.VC.db
+**/*.VC.opendb
+**/*.opensdf
+**/*.sdf
+
+# Packaged game builds (publish separately as releases)
+ProjectWM3.0/Build/Windows/
+ProjectWM3.0/Build/Windows_LobbyTravelFix/
+ProjectWM3.0/Build/Windows_LobbyTravelFix_V2/
+ProjectWM3.0/Build/Windows_LobbyTravelFix.zip
