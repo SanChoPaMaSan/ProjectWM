@@ -7,8 +7,21 @@ def log(message):
 
 light_count = 0
 bad_lights = 0
+yard_environment_ok = False
 if unreal.EditorLoadingAndSavingUtils.load_map("/Game/H/LEVEL/HOUSE"):
+    directional_ok = False
+    skylight_ok = False
     for actor in unreal.EditorLevelLibrary.get_all_level_actors():
+        if actor.get_actor_label() == "DirectionalLight":
+            components = actor.get_components_by_class(unreal.DirectionalLightComponent)
+            component = components[0] if components else None
+            directional_ok = bool(component) and component.get_editor_property("intensity") == 10.0
+            log(f"YARD_DIRECTIONAL|ok={directional_ok}|intensity={component.get_editor_property('intensity') if component else 'None'}")
+        elif actor.get_actor_label() == "SkyLight":
+            components = actor.get_components_by_class(unreal.SkyLightComponent)
+            component = components[0] if components else None
+            skylight_ok = bool(component) and component.get_editor_property("intensity") == 2.0
+            log(f"YARD_SKYLIGHT|ok={skylight_ok}|intensity={component.get_editor_property('intensity') if component else 'None'}")
         if not actor.get_actor_label().startswith("IndoorFillLight_"):
             continue
         light_count += 1
@@ -22,6 +35,7 @@ if unreal.EditorLoadingAndSavingUtils.load_map("/Game/H/LEVEL/HOUSE"):
             f"loc={actor.get_actor_location()}|intensity={component.get_editor_property('intensity') if component else 'None'}|"
             f"radius={component.get_editor_property('attenuation_radius') if component else 'None'}"
         )
+    yard_environment_ok = directional_ok and skylight_ok
 else:
     bad_lights += 6
     log("HOUSE_LOAD_FAILED")
@@ -41,4 +55,4 @@ if unreal.EditorLoadingAndSavingUtils.load_map("/Game/LEVEL/WM"):
 else:
     log("WM_LOAD_FAILED")
 
-log(f"SUMMARY|lights={light_count}|bad_lights={bad_lights}|ppv_ok={ppv_ok}")
+log(f"SUMMARY|lights={light_count}|bad_lights={bad_lights}|yard_environment_ok={yard_environment_ok}|ppv_ok={ppv_ok}")
